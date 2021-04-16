@@ -1,9 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: #ececec;
+}
+::-webkit-scrollbar-thumb:vertical {
+  height: 8px;
+  background-color: #0047ba;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:vertical:hover {
+  height: 8px;
+  background-color: #00aeef;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  height: 8px;
+  background-color: #0047ba;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:horizontal:hover {
+  height: 8px;
+  background-color: #00aeef;
+}
+::-moz-vertical-scrollbar {
+  width: 8px;
+  height: 15px;
+}
+::-moz-vertical-scrollbar-track-piece {
+  background-color: #ccc;
+}
+::-moz-vertical-scrollbar-thumb:vertical {
+  height: 8px;
+  background-color: #951f0b;
+}
+::-moz-vertical-scrollbar-thumb:horizontal {
+  height: 8px;
+  background-color: #951f0b;
 }
 
 a {
@@ -13,4 +59,112 @@ a {
 
 * {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.loginInput {
+  @apply bg-[#f7f6f9] text-[#91899f] px-[1.5rem] py-[1rem] focus:outline-none rounded-full w-[20rem] md:w-[22rem] pr-[2.3rem];
+}
+
+.roundedBtn {
+  @apply bg-[#0047ba] hover:bg-[#133ba0] text-white px-[1.5rem] py-[1rem] w-[10rem] font-semibold rounded-full mt-5 self-center focus:outline-none;
+}
+
+.blueNavBtn {
+  @apply bg-[#0047ba] hover:bg-[#133ba0] text-white px-[1.5rem] py-[1rem] w-full rounded-full flex items-center;
+}
+
+.dateBtn {
+  @apply bg-[#0047ba] focus:outline-none text-white rounded-full flex items-center justify-center p-1;
+}
+
+.a {
+  @apply text-[#0047ba] hover:text-[#007bff];
+}
+.heading {
+  font-family: "Roboto", sans-serif;
+  @apply text-[#3f4047] font-semibold text-2xl;
+}
+
+.h2 {
+  @apply font-medium text-[1.25rem] leading-tight mb-0;
+}
+
+.p {
+  @apply mb-[1rem];
+}
+
+.bell {
+  animation: rotate 1s;
+  animation-delay: 1s;
+  animation-iteration-count: infinite;
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(30deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-30deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.data {
+  color: #575962;
+  padding: 2.2rem;
+  font-size: 0.9rem;
+}
+
+.data h6 {
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  font-size: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.data ol {
+  list-style: lower-alpha;
+  padding-left: 2rem;
+}
+.data ol > li {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+.data a {
+  color: #0047ba;
+}
+.data a:hover {
+  color: #007bff;
+}
+.data ul {
+  margin: 1rem 0;
+  margin-left: 3rem;
+  color: #575962;
+}
+.data ul li {
+  font-size: 0.9rem;
+}
+
+.recharts-pie-sector text {
+  font-size: 0.7rem;
+}
+
+.recharts-cartesian-axis-tick-value {
+  font-size: 0.7rem;
+}
+
+.recharts-legend-item {
+  display: none !important;
 }

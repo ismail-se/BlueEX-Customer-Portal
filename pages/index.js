@@ -1,65 +1,48 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import LoginArea from "../components/LoginArea";
+import { parseCookies } from "../helpers/";
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>
+          Login | blueEX Booking App - The one stop shop to access all blueEX
+          services
+        </title>
+        <link rel="icon" href="/icons/favicon.ico" />
       </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+      {/* Login Page */}
+      <main className="flex w-screen h-screen">
+        {/* Login Area */}
+        <div className="flex-1 flex items-center justify-center">
+          <LoginArea />
         </div>
+        {/* Image Area */}
+        <div
+          className="hidden lg:flex bg-center bg-no-repeat bg-cover"
+          style={{
+            flex: "2",
+            backgroundImage: "url('/images/app-login-img.jpg')",
+          }}
+        ></div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
     </div>
-  )
+  );
+}
+
+export async function getServerSideProps({ req, res }) {
+  const data = parseCookies(req);
+
+  if (res) {
+    if ("user" in Object.keys(data)) {
+      res.writeHead(301, { Location: "/dashboard" });
+      res.end();
+    }
+  }
+  return {
+    props: {
+      data: data,
+    },
+  };
 }

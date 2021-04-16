@@ -5,11 +5,36 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "bootstrap": "^4.6.0",
+    "cookie": "^0.4.1",
+    "date-fns": "^2.21.1",
+    "formik": "^2.2.6",
     "next": "10.1.3",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react": "^17.0.2",
+    "react-bootstrap": "^1.5.2",
+    "react-cookie": "^4.0.3",
+    "react-currency-format": "^1.0.0",
+    "react-date-range": "^1.1.3",
+    "react-dom": "17.0.2",
+    "recharts": "^2.0.9"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.15",
+    "@storybook/addon-actions": "^6.2.8",
+    "@storybook/addon-essentials": "^6.2.8",
+    "@storybook/addon-links": "^6.2.8",
+    "@storybook/react": "^6.2.8",
+    "autoprefixer": "^10.2.5",
+    "babel-loader": "^8.2.2",
+    "postcss": "^8.2.10",
+    "tailwindcss": "^2.1.1"
   }
 }
