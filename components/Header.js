@@ -3,15 +3,29 @@ import ShareIcon from "@material-ui/icons/Share";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ClearIcon from "@material-ui/icons/Clear";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Drawer } from "@material-ui/core";
 import SidebarInner from "./SidebarInner";
 import { useStateValue } from "../context/StateProvider";
 import { actionTypes } from "../context/reducer";
+import NotificationBox from "./NotificationBox/NotificationBox";
+import ProfileBox from "./ProfileBox/ProfileBox";
+import QuickActionBox from "./QuickActionsBox/QuickActionsBox";
+import useVisible from "../hooks/useVisible";
 
 const Header = () => {
   const [{ name }, dispatch] = useStateValue();
   const [state, setState] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [showQuick, setShowQuick] = useState(false);
+  const ref = useRef();
+
+  useVisible(ref, () => {
+    setShowProfile(false);
+    setShowNotification(false);
+    setShowQuick(false);
+  });
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -56,13 +70,44 @@ const Header = () => {
               021-111-BLUE-EX (021-111-258339)
             </span>
           </div>
-          <div className="flex items-center space-x-4">
-            <NotificationsIcon className="text-gray-400 bell" />
-            <ShareIcon className="text-gray-400" />
-            <AccountCircleIcon className="text-gray-400" />
-            <div className="hidden sm:block">
+          <div ref={ref} className="flex items-center space-x-4">
+            <NotificationsIcon
+              onClick={() => {
+                setShowNotification(!showNotification);
+                setShowQuick(false);
+                setShowProfile(false);
+              }}
+              className="text-gray-400 bell"
+            />
+            <ShareIcon
+              onClick={() => {
+                setShowNotification(false);
+                setShowQuick(!showQuick);
+                setShowProfile(false);
+              }}
+              className="text-gray-400"
+            />
+            <AccountCircleIcon
+              onClick={() => {
+                setShowNotification(false);
+                setShowQuick(false);
+                setShowProfile(!showProfile);
+              }}
+              className="text-gray-400"
+            />
+            <div
+              onClick={() => {
+                setShowNotification(false);
+                setShowQuick(false);
+                setShowProfile(!showProfile);
+              }}
+              className="hidden sm:block cursor-pointer"
+            >
               HELLO <span className="font-bold uppercase">{name} !</span>
             </div>
+            {showNotification && <NotificationBox />}
+            {showQuick && <QuickActionBox />}
+            {showProfile && <ProfileBox />}
           </div>
         </div>
       </div>

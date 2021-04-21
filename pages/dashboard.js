@@ -48,19 +48,20 @@ const Dashboard = ({ data }) => {
 
 export default Dashboard;
 
-export async function getServerSideProps({ req, res }) {
+Dashboard.getInitialProps = async ({ req, res }) => {
   const data = parseCookies(req);
 
   if (res) {
-    if (Object(data).user === "undefined" && data.constructor === Object) {
-      res.statusCode = 302;
-      res.setHeader("Location", `/`);
+    if (
+      (Object.keys(data).length === 0 && data.constructor === Object) ||
+      Object(data).user === "undefined"
+    ) {
+      res.writeHead(301, { Location: "/" });
+      res.end();
     }
   }
 
   return {
-    props: {
-      data: data,
-    },
+    data: data && data,
   };
-}
+};

@@ -31,18 +31,22 @@ export default function Home() {
   );
 }
 
-export async function getServerSideProps({ req, res }) {
+Home.getInitialProps = async ({ req, res }) => {
   const data = parseCookies(req);
 
   if (res) {
-    if ("user" in Object.keys(data)) {
+    if (
+      !(
+        (Object.keys(data).length === 0 && data.constructor === Object) ||
+        Object(data).user === "undefined"
+      )
+    ) {
       res.writeHead(301, { Location: "/dashboard" });
       res.end();
     }
   }
+
   return {
-    props: {
-      data: data,
-    },
+    data: data && data,
   };
-}
+};

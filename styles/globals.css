@@ -91,6 +91,10 @@ a {
   @apply font-medium text-[1.25rem] leading-tight mb-0;
 }
 
+.h3 {
+  @apply font-medium text-[1.1rem] leading-tight mb-0;
+}
+
 .p {
   @apply mb-[1rem];
 }
@@ -157,6 +161,8 @@ a {
   font-size: 0.9rem;
 }
 
+/* Charts */
+
 .recharts-pie-sector text {
   font-size: 0.7rem;
 }
@@ -167,4 +173,38 @@ a {
 
 .recharts-legend-item {
   display: none !important;
+}
+
+/* Date Range Picker */
+
+@media (max-width: 960px) {
+  .rdrDateRangePickerWrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  .rdrDefinedRangesWrapper {
+    width: 100%;
+  }
+}
+
+@media (max-width: 730px) {
+  .rdrMonths {
+    flex-direction: column;
+  }
+}
+
+.row {
+  @apply flex items-center flex-col sm:flex-row w-full p-4 pl-8;
+}
+.label {
+  @apply text-sm sm:w-[12rem] w-full;
+}
+.shipmentInput {
+  @apply rounded-sm border-[1px] focus:outline-none  text-sm flex-1 p-2 w-full;
+}
+.validate {
+  @apply border-red-600 focus:border-red-600;
+}
+.nonValid {
+  @apply border-gray-300 focus:border-blue-500;
 }
