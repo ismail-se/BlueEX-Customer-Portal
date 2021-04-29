@@ -1,8 +1,25 @@
 import { Card, CardContent } from "@material-ui/core";
 import Layout from "../components/Layout";
 import Head from "next/head";
+import { parseCookies } from "../helpers/";
+import { useEffect } from "react";
+import { useStateValue } from "../context/StateProvider";
+import { actionTypes } from "../context/reducer";
 
-const About = () => {
+const About = ({ data }) => {
+  const [{ acno }, dispatch] = useStateValue();
+  const res = JSON.parse(data.user);
+
+  useEffect(() => {
+    dispatch({
+      type: actionTypes.SET_USER,
+      acno: res.acno,
+      b_usrId: res.b_usrId,
+      name: res.name,
+      acc_type: res.type,
+    });
+  }, []);
+
   return (
     <Layout>
       <Head>
@@ -19,11 +36,7 @@ const About = () => {
             and manage your Cash On Delivery shipments. To see our new list of
             features, please review our Starter Guide. To find out more about
             blueEX visit our website{" "}
-            <a
-              href="https://www.blue-ex.com"
-              target="_blank"
-              className="a"
-            >
+            <a href="https://www.blue-ex.com" target="_blank" className="a">
               www.blue-ex.com
             </a>
           </CardContent>
@@ -35,7 +48,7 @@ const About = () => {
 
 export default About;
 
-About..getInitialProps = async ({ req, res }) => {
+About.getInitialProps = async ({ req, res }) => {
   const data = parseCookies(req);
 
   if (res) {

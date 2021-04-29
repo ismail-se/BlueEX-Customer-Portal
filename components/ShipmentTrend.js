@@ -99,10 +99,6 @@ const ShipmentTrend = () => {
     );
   }, [state]);
 
-  useEffect(() => {
-    console.log(elements);
-  }, [elements]);
-
   const ref = useRef();
 
   useVisible(ref, () => {
@@ -119,7 +115,7 @@ const ShipmentTrend = () => {
             ref={ref}
             onClick={() => setDateView(!dateView)}
           >
-            <span className="text-[#0047ba]">
+            <span className="text-[#0047ba] hidden sm:block">
               {selectedDate && selectedDate}
             </span>
             <button className="dateBtn">

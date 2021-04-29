@@ -95,7 +95,7 @@ const AccountSummary = () => {
             ref={ref}
             onClick={() => setDateView(!dateView)}
           >
-            <span className="text-[#0047ba]">
+            <span className="text-[#0047ba] hidden sm:block">
               {selectedDate && selectedDate}
             </span>
             <button className="dateBtn">
@@ -352,7 +352,7 @@ const AccountSummary = () => {
         </CardContent>
         {dateView && (
           <DateRangePicker
-            ref={ref}
+            // ref={ref}
             className="absolute top-16 right-0 z-10 shadow-md"
             onChange={(item) => {
               setState([item.selection]);

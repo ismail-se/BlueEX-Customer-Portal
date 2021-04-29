@@ -99,6 +99,18 @@ a {
   @apply mb-[1rem];
 }
 
+.btnGroup {
+  @apply gap-3 flex flex-col sm:flex-row;
+}
+
+.btn {
+  @apply text-white bg-[#c4c5d6] rounded-sm text-sm hover:text-white focus:ring-transparent focus:ring-0;
+}
+
+.btnBlueBg {
+  @apply text-white bg-[#0047ba] rounded-sm text-sm hover:text-white focus:ring-transparent focus:ring-0 p-[1rem];
+}
+
 .bell {
   animation: rotate 1s;
   animation-delay: 1s;
@@ -202,9 +214,24 @@ a {
 .shipmentInput {
   @apply rounded-sm border-[1px] focus:outline-none  text-sm flex-1 p-2 w-full;
 }
+.trackInput {
+  @apply rounded-sm border-[1px] focus:outline-none  text-sm flex-1 p-4 w-full;
+}
 .validate {
   @apply border-red-600 focus:border-red-600;
 }
 .nonValid {
   @apply border-gray-300 focus:border-blue-500;
+}
+
+.csvButton {
+  @apply py-[0.35rem] px-[1.25rem] text-sm leading-6 rounded-sm border bg-white transition-all duration-200 hover:bg-[#ebedf2] focus:outline-none;
+}
+
+.bookingBtn {
+  @apply bg-[#0047ba] w-full text-white p-2 rounded-sm flex justify-center items-center;
+}
+
+.bookingSpan {
+  @apply text-[#0047ba] bg-white rounded-full font-semibold flex justify-center items-center w-[1.5rem] h-[1.5rem] ml-2;
 }

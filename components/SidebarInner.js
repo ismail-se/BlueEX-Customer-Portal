@@ -63,22 +63,22 @@ const SidebarInner = () => {
         </ListItem>
         <Collapse in={shipmentOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <Link href="/">
+            <Link href="/deliveries">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Deliveries" />
               </ListItem>
             </Link>
-            <Link href="/">
+            <Link href="/pickup">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Pickups" />
               </ListItem>
             </Link>
-            <Link href="/">
+            <Link href="/tracking">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Multi-track" />
               </ListItem>
             </Link>
-            <Link href="/">
+            <Link href="/upload-booking">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Bulk Import" />
               </ListItem>
@@ -99,7 +99,7 @@ const SidebarInner = () => {
         </ListItem>
         <Collapse in={settlementOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <Link href="/">
+            <Link href="/statements">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Statements" />
               </ListItem>
@@ -125,12 +125,12 @@ const SidebarInner = () => {
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Knowledge Base" />
               </ListItem>
             </Link>
-            <Link href="/">
+            <Link href="/guides">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Video Guides" />
               </ListItem>
             </Link>
-            <Link href="/">
+            <Link href="/release-notes">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Release Notes" />
               </ListItem>
