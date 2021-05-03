@@ -12,6 +12,7 @@ import UploadShipmentListTable from "../components/UploadShipmentListTable";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import UploadSuccessfully from "../components/UploadSuccessfully";
+import uploadError from "../components/UploadError";
 
 const UploadBooking = ({ data }) => {
   const [{ acno }, dispatch] = useStateValue();
@@ -307,6 +308,18 @@ const UploadBooking = ({ data }) => {
                     </button>
                   </div>
                   <UploadShipmentListTable data={tableData} />
+                </>
+              )}
+            </div>
+            <div>
+              {errorTable.length !== 0 && showTable === "uploadError" && (
+                <>
+                  <div>
+                    <button onClick={onShipment} className="btnBlueBg mb-4">
+                      Create Shipments
+                    </button>
+                  </div>
+                  <uploadError data={errorTable} />
                 </>
               )}
             </div>

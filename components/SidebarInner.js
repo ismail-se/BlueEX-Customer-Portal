@@ -146,7 +146,7 @@ const SidebarInner = () => {
         </ListItem>
         <Collapse in={accountOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <Link href="/">
+            <Link href="/profile">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Profile" />
               </ListItem>

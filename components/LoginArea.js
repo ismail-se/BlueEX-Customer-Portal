@@ -62,6 +62,7 @@ const LoginArea = () => {
         maxAge: 3600, // Expires after 1hr
         sameSite: true,
       });
+      localStorage.setItem("password", password.current.value);
       dispatch({
         type: actionTypes.SET_USER,
         acno: res.acno,

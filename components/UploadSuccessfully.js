@@ -20,6 +20,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
 
 function createData(cn, customer, product, cod, fromTo, custRef, remarks) {
   return { cn, customer, product, cod, fromTo, custRef, remarks };
@@ -189,7 +190,7 @@ export default function UploadSuccessfully({ data }) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  
+
   const [rows, setRows] = React.useState([]);
 
   useEffect(() => {
@@ -201,7 +202,9 @@ export default function UploadSuccessfully({ data }) {
           d.customer,
           d.product,
           d.cod,
-          `${d.from} ${d.to}`,
+          <div>
+            {d.from} <ArrowRightAltIcon /> {d.to}
+          </div>,
           d.customerRef,
           d.remarks
         ),

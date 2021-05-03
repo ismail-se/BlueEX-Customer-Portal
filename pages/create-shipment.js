@@ -32,6 +32,29 @@ const CreateShipment = ({ data }) => {
   const country = useCountries();
   const city = useCities(selectedCountry);
   const originCity = useCities("PK");
+  const [prodValue, setProdValue] = useState("0");
+  const [saleDiscount, setSaleDiscount] = useState("");
+  const [cbc, setCbc] = useState("Y");
+  const [origCity, setOrigCity] = useState("KHI");
+  const [destCountry, setDestCountry] = useState("");
+  const [destCity, setDestCity] = useState("KHI");
+  const [insur, setInsur] = useState("N");
+  const [coment, setComent] = useState("");
+  const [serviceCode, setServiceCode] = useState("");
+  const [ptype, setPtype] = useState("N");
+  const [fragile, setFragile] = useState("N");
+  const [shpName, setShpName] = useState("");
+  const [shpAdd, setShpAdd] = useState("");
+  const [shpCont, setShpCont] = useState("");
+  const [shpMail, setShpMail] = useState("");
+  const [storeId, setStoreId] = useState("");
+  const [bookingType, setBookingType] = useState("");
+  const [insurValue, setInsurValue] = useState("");
+  const [inputColor, setInputColor] = useState("nonValid");
+
+  const [status, setStatus] = useState("Save");
+  const [message, setMessage] = useState("success");
+  const [cnno, setCnno] = useState("5014619681");
 
   // prevent submitting invalid or empty emails
   const {
@@ -41,10 +64,8 @@ const CreateShipment = ({ data }) => {
   } = useForm();
   // handle form submit
   const onSubmit = async (data) => {
-    console.log({ data });
-    // console.log(
-    //   `http://benefitx.blue-ex.com/api/customerportal/booking_new.php?prod_value=${prodValue}&salediscount=${saleDiscount}&con_name=${conName}&con_add=${conAdd}&con_cont=${conCont}&con_mail=${conMail}&cbc=${cbc}&orig_city=${origCity}&dest_country=${destCountry}&dest_city=${destCity}&insur=${insur}&coment=${coment}&prod_detail=${prodDetail}&service_code=${serviceCode}&ptype=${ptype}&pcs=${pcs}&wgt=${wgt}&fragile=${fragile}&cust_ref=${custRef}&shp_name=${shpName}&shp_add=${shpAdd}&shp_cont=${shpCont}&shp_mail=${shpMail}&storeid=${storeId}&booking_type=${bookingType}&insur_value=${insurValue}&acno=${acno}&status=${status}&message=${message}&cnno=${cnno}`
-    // );
+    console.log("Orig City ", origCity);
+    console.log("Dest City ", destCity);
     const res = await createShipment(
       prodValue,
       saleDiscount,
@@ -106,30 +127,6 @@ const CreateShipment = ({ data }) => {
       });
     }
   };
-
-  const [prodValue, setProdValue] = useState("0");
-  const [saleDiscount, setSaleDiscount] = useState("");
-  const [cbc, setCbc] = useState("Y");
-  const [origCity, setOrigCity] = useState("KHI");
-  const [destCountry, setDestCountry] = useState("");
-  const [destCity, setDestCity] = useState("");
-  const [insur, setInsur] = useState("N");
-  const [coment, setComent] = useState("");
-  const [serviceCode, setServiceCode] = useState("");
-  const [ptype, setPtype] = useState("N");
-  const [fragile, setFragile] = useState("N");
-  const [shpName, setShpName] = useState("");
-  const [shpAdd, setShpAdd] = useState("");
-  const [shpCont, setShpCont] = useState("");
-  const [shpMail, setShpMail] = useState("");
-  const [storeId, setStoreId] = useState("");
-  const [bookingType, setBookingType] = useState("");
-  const [insurValue, setInsurValue] = useState("");
-  const [inputColor, setInputColor] = useState("nonValid");
-
-  const [status, setStatus] = useState("Save");
-  const [message, setMessage] = useState("success");
-  const [cnno, setCnno] = useState("5014619681");
 
   const [cbcChecked, setCbcChecked] = useState(false);
   const toggleCbc = () => {
@@ -297,8 +294,8 @@ const CreateShipment = ({ data }) => {
                     </label>
                     <select
                       className="shipmentInput nonValid"
-                      value={selectedCity}
-                      onChange={(e) => setSelectedCity(e.target.value)}
+                      value={destCity}
+                      onChange={(e) => setDestCity(e.target.value)}
                       name="city"
                       id="city"
                     >
@@ -491,8 +488,8 @@ const CreateShipment = ({ data }) => {
                       className="shipmentInput nonValid"
                       value={coment}
                       onChange={(e) => setComent(e.target.value)}
-                      name="service"
-                      id="service"
+                      name="coment"
+                      id="coment"
                       cols="30"
                       rows="3"
                       placeholder="This is exchange product, size Medium"

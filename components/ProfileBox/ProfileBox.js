@@ -11,7 +11,7 @@ const ProfileBox = ({ display }) => {
 
   const logout = (req, res) => {
     removeCookie("user");
-    console.log(cookie.user);
+    localStorage.setItem("password", "");
     window.location.href = "/";
   };
 
