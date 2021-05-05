@@ -1,11 +1,15 @@
 import Head from "next/head";
 import Layout from "../components/Layout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { actionTypes } from "../context/reducer";
 import { useStateValue } from "../context/StateProvider";
 import { parseCookies } from "../helpers/";
+import Link from "next/link";
+import CalculateFareModal from "../components/Modals/CalculateFareModal";
+import useCities from "../hooks/useCities";
+import fetchCities from "../functions/fetchCities";
 
-const Deliveries = ({ data }) => {
+const Deliveries = ({ data, cities }) => {
   const [{ acno }, dispatch] = useStateValue();
   const res = JSON.parse(data.user);
 
@@ -19,6 +23,9 @@ const Deliveries = ({ data }) => {
     });
   }, []);
 
+  // Modal
+  const [show, setShow] = useState(false);
+
   return (
     <div>
       <Head>
@@ -31,11 +38,20 @@ const Deliveries = ({ data }) => {
         <div className="mb-4 flex items-center justify-between">
           <h1 className="heading">Deliveries</h1>
           <div className="btnGroup">
-            <button className="btn">Calculate Fare</button>
-            <button className="btn">Bulk Import</button>
+            <button className="btn" onClick={() => setShow(true)}>
+              Calculate Fare
+            </button>
+            <Link href="/upload-booking">
+              <button className="btn">Bulk Import</button>
+            </Link>
           </div>
         </div>
       </Layout>
+      <CalculateFareModal
+        cities={cities}
+        show={show}
+        onHide={() => setShow(false)}
+      />
     </div>
   );
 };
@@ -44,6 +60,7 @@ export default Deliveries;
 
 Deliveries.getInitialProps = async ({ req, res }) => {
   const data = parseCookies(req);
+  const cities = await fetchCities("PK");
 
   if (res) {
     if (
@@ -57,5 +74,6 @@ Deliveries.getInitialProps = async ({ req, res }) => {
 
   return {
     data: data && data,
+    cities: cities,
   };
 };

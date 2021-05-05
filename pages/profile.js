@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@material-ui/core";
+import { Card, CardContent, CircularProgress } from "@material-ui/core";
 import Layout from "../components/Layout";
 import Head from "next/head";
 import { parseCookies } from "../helpers/";
@@ -12,9 +12,11 @@ import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import updateProfile from "../functions/updateProfile";
 import Alert from "react-bootstrap/Alert";
 
-const Profile = ({ data }) => {
+const Profile = ({ data, userdata }) => {
   const [{ acno }, dispatch] = useStateValue();
   const res = JSON.parse(data.user);
+
+  console.log(userdata);
 
   useEffect(() => {
     dispatch({
@@ -37,6 +39,8 @@ const Profile = ({ data }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [status, setStatus] = useState(null);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const updateData = async () => {
     const data = await updateProfile(
       res.acno,
@@ -50,9 +54,9 @@ const Profile = ({ data }) => {
       cnic,
       password
     );
-    console.log(data);
     setShowAlert(true);
     data.status === "1" ? setStatus(1) : setStatus(0);
+    setIsLoading(false);
   };
 
   // prevent submitting invalid or empty emails
@@ -63,7 +67,7 @@ const Profile = ({ data }) => {
   } = useForm();
   // handle form submit
   const onSubmit = async (data) => {
-    console.log(data);
+    setIsLoading(true);
     updateData();
   };
 
@@ -79,21 +83,16 @@ const Profile = ({ data }) => {
   }
   const [password, setPassword] = useState(pass);
 
-  const fetchData = async () => {
-    const data = await fetchProfile(res.acno);
-    if (data) {
-      let d = data.detail[0];
-      setAccountTitle(d.AccountTitle);
-      setAddress(d.Address);
-      setCnic(d.CNIC);
-      setCell(d.Cell);
-      setEmail(d.Email);
-      setNtn(d.NTN);
-      setName(d.Name);
-    }
-  };
-
-  useEffect(() => fetchData(), []);
+  useEffect(() => {
+    let d = userdata.detail[0];
+    setAccountTitle(d.AccountTitle);
+    setAddress(d.Address);
+    setCnic(d.CNIC);
+    setCell(d.Cell);
+    setEmail(d.Email);
+    setNtn(d.NTN);
+    setName(d.Name);
+  }, []);
 
   return (
     <Layout>
@@ -284,7 +283,11 @@ const Profile = ({ data }) => {
                       className="bg-[#0047ba] text-white px-[3rem] py-[0.8rem] rounded-sm"
                       type="submit"
                     >
-                      Save
+                      {isLoading ? (
+                        <CircularProgress className="text-white" size="20px" />
+                      ) : (
+                        "Save"
+                      )}
                     </button>
                   </div>
                 </div>
@@ -317,6 +320,9 @@ export default Profile;
 
 Profile.getInitialProps = async ({ req, res }) => {
   const data = parseCookies(req);
+  const user = JSON.parse(data.user);
+  let userdata = "";
+  let json;
 
   if (res) {
     if (
@@ -325,10 +331,13 @@ Profile.getInitialProps = async ({ req, res }) => {
     ) {
       res.writeHead(301, { Location: "/" });
       res.end();
+    } else {
+      userdata = await fetchProfile(user.acno);
     }
   }
 
   return {
     data: data && data,
+    userdata: userdata,
   };
 };

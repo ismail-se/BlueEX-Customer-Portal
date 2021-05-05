@@ -83,7 +83,7 @@ const SidebarInner = () => {
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Bulk Import" />
               </ListItem>
             </Link>
-            <Link href="/">
+            <Link href="/return-requests">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Return Requests" />
               </ListItem>
@@ -115,7 +115,7 @@ const SidebarInner = () => {
         </ListItem>
         <Collapse in={supportOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <Link href="/">
+            <Link href="/developer-center">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Developer Center" />
               </ListItem>
@@ -151,16 +151,16 @@ const SidebarInner = () => {
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Profile" />
               </ListItem>
             </Link>
-            <Link href="/">
+            <Link href="/services">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Services" />
               </ListItem>
             </Link>
-            <Link href="/">
+            {/* <Link href="/manage-users">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Manage Users" />
               </ListItem>
-            </Link>
+            </Link> */}
             <Link href="/">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Pickup Locations" />
