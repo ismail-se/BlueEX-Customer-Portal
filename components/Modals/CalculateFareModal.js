@@ -1,14 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import fetchCities from "../../functions/fetchCities";
+import calculateFare from "../../functions/calculateFare";
+import { useStateValue } from "../../context/StateProvider";
 
-export default function CalculateFareModal({ show, onHide, cities }) {
-  const [showAlert, setShowAlert] = useState(true);
-
+export default function CalculateFareModal({ show, onHide }) {
+  const [showAlert, setShowAlert] = useState(false);
+  const [cities, setCities] = useState(null);
   const [serviceCode, setServiceCode] = useState("BE");
   const [originCity, setOriginCity] = useState("KHI");
   const [destinationCountry, setDestinationCountry] = useState("PK");
   const [destinationCity, setDestinationCity] = useState("KHI");
+  const [{ acno, b_usrId }, dispatch] = useStateValue();
+  const [rate, setRate] = useState("0.0");
+
+  useEffect(async () => {
+    setCities(await fetchCities("PK"));
+  }, []);
 
   // prevent submitting invalid or empty emails
   const {
@@ -18,11 +27,17 @@ export default function CalculateFareModal({ show, onHide, cities }) {
   } = useForm();
   // handle form submit
   const onSubmit = async (data) => {
-    console.log(data);
-    console.log(serviceCode);
-    console.log(originCity);
-    console.log(destinationCountry);
-    console.log(destinationCity);
+    let fare = await calculateFare(
+      acno,
+      originCity,
+      destinationCity,
+      serviceCode,
+      data.cbc,
+      data.cod
+    );
+    console.log(fare);
+    setRate(fare.rate);
+    setShowAlert(true);
   };
 
   return (
@@ -45,7 +60,7 @@ export default function CalculateFareModal({ show, onHide, cities }) {
             className="w-full"
             dismissible
           >
-            <p>Your Calculated Fare Amount is Rs. 0.0</p>
+            <p>Your Calculated Fare Amount is Rs. {rate}</p>
           </Alert>
           <div>
             {/* Row 1 */}

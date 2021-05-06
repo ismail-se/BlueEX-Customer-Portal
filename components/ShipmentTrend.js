@@ -9,6 +9,8 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { CircularProgress } from "@material-ui/core";
 import Example from "./Chart/LineChart";
 import useVisible from "../hooks/useVisible";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import Link from "next/link";
 
 const ShipmentTrend = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -51,7 +53,7 @@ const ShipmentTrend = () => {
       data.detail.forEach((d) => {
         temp.push({
           name: d.y,
-          pv: +d.a,
+          Shipments: +d.a,
           amt: +d.a,
         });
       });
@@ -110,17 +112,80 @@ const ShipmentTrend = () => {
       <Card variant="outlined">
         <CardContent className="border-b p-4 flex items-center justify-between ">
           <h2 className="h2">Shipment Trend</h2>
-          <div
-            className="flex items-center space-x-4"
-            ref={ref}
-            onClick={() => setDateView(!dateView)}
-          >
-            <span className="text-[#0047ba] hidden sm:block">
-              {selectedDate && selectedDate}
-            </span>
-            <button className="dateBtn">
-              <KeyboardArrowDownIcon />
-            </button>
+          <div className="flex items-center space-x-4">
+            <div
+              className="flex items-center space-x-4"
+              ref={ref}
+              onClick={() => setDateView(!dateView)}
+            >
+              <span className="text-[#0047ba] hidden sm:block">
+                {selectedDate && selectedDate}
+              </span>
+              <button className="dateBtn">
+                <KeyboardArrowDownIcon />
+              </button>
+            </div>
+            <Link href="/deliveries">
+              <button className="bg-white border border-gray-300 rounded-full py-2 px-4 text-[#0047ba] flex justify-center items-center hover:bg-[#ebedf2]">
+                View <ArrowForwardIosIcon fontSize="small" />
+              </button>
+            </Link>
+          </div>
+        </CardContent>
+        <CardContent
+          className="border-b flex flex-col md:flex-row text-[#9699a2]"
+          style={{ padding: "0" }}
+        >
+          <div className="border-b md:border-b-0 md:border-r flex-1 py-[1.1rem] px-[2.2rem]">
+            <p className="font-light">Shipments</p>
+            <h3 className="font-medium text-[#6f727d] text-xl">
+              <CurrencyFormat
+                renderText={(value) => <>{value}</>}
+                value={shipments}
+                displayType={"text"}
+                thousandSeparator={true}
+                decimalScale={2}
+              />
+            </h3>
+          </div>
+          <div className="border-b md:border-b-0 md:border-r flex-1 py-[1.1rem] px-[2.2rem]">
+            <p className="font-light">COD</p>
+            <h3 className="font-medium text-[#6f727d] text-xl">
+              <CurrencyFormat
+                renderText={(value) => <>{value}</>}
+                value={cod}
+                displayType={"text"}
+                thousandSeparator={true}
+                decimalScale={2}
+                prefix={"PKR "}
+              />
+            </h3>
+          </div>
+          <div className="border-b md:border-b-0 md:border-r flex-1 py-[1.1rem] px-[2.2rem]">
+            <p className="font-light">Service Charges</p>
+            <h3 className="font-medium text-[#6f727d] text-xl">
+              <CurrencyFormat
+                renderText={(value) => <>{value}</>}
+                value={charges}
+                displayType={"text"}
+                thousandSeparator={true}
+                decimalScale={2}
+                prefix={"PKR "}
+              />
+            </h3>
+          </div>
+          <div className="flex-1 py-[1.1rem] px-[2.2rem]">
+            <p className="font-light">Amount Settle</p>
+            <h3 className="font-medium text-[#6f727d] text-xl">
+              <CurrencyFormat
+                renderText={(value) => <>{value}</>}
+                value={settle}
+                displayType={"text"}
+                thousandSeparator={true}
+                decimalScale={2}
+                prefix={"PKR "}
+              />
+            </h3>
           </div>
         </CardContent>
         <CardContent>

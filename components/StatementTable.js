@@ -11,6 +11,20 @@ import TableRow from "@material-ui/core/TableRow";
 import SearchBar from "material-ui-search-bar";
 import { CircularProgress } from "@material-ui/core";
 import { useEffect } from "react";
+import { useStateValue } from "../context/StateProvider";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import Alert from "@material-ui/lab/Alert";
+import { CSVLink } from "react-csv";
+import CurrencyFormat from "react-currency-format";
+
+const headers = [
+  { label: "Ref. No", key: "ref" },
+  { label: "Date", key: "date" },
+  { label: "Period", key: "period" },
+  { label: "COD", key: "cod" },
+];
+
+let csvData = [];
 
 const dateChanger = (date) => {
   let d = date.split("-");
@@ -81,8 +95,6 @@ function createData(ref, date, period, cod, print) {
   return { ref, date, period, cod, print };
 }
 
-let originalRows = [];
-
 const useStyles = makeStyles({
   root: {
     width: "100%",
@@ -92,34 +104,110 @@ const useStyles = makeStyles({
   },
 });
 
-export default function StatementTable({ data }) {
+export default function StatementTable() {
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(true);
+  const [{ acno, b_usrId }, dispatch] = useStateValue();
+  const [data, setData] = useState(null);
+  const [originalRows, setOriginalRows] = useState([]);
+  const [copied, setCopied] = useState(false);
+  useEffect(() => {
+    if (copied) {
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    }
+  }, [copied]);
+
+  const [copyText, setCopyText] = useState("");
 
   useEffect(() => {
-    if (data !== undefined && data !== []) {
-      // originalRows = [];
+    const url = `http://benefitx.blue-ex.com/api/customerportal/statement.php?acno=${acno}&hashkey=KaPdSgVkYp3s6v9y`;
+    fetch(url)
+      .then((response) => response.json())
+      .then((result) => setData(result))
+      .catch((error) => console.log("error", error));
+  }, [acno]);
+
+  useEffect(() => {
+    if (data !== null) {
+      let newRows = [];
+      let cp = `Ref.No\tDate\t\tPeriod\t\t\tCOD\n`;
       data.map((d) => {
-        originalRows.push(
-          createData(
-            d.FPS_CODE,
-            dateFormat(d.DATE),
-            dateChanger(d.SDATE) + " to " + dateChanger(d.EDATE),
-            d.CODAMOUNT,
-            <div className="flex gap-2">
-              <img src="/icons/acrobat.svg" width="16px" />{" "}
-              <img src="/icons/file.svg" width="16px" />
-            </div>
-          )
+        let ro = createData(
+          d.FPS_CODE,
+          dateFormat(d.DATE),
+          dateChanger(d.SDATE) + " to " + dateChanger(d.EDATE),
+          <CurrencyFormat
+            renderText={(value) => <>{value}</>}
+            value={d.CODAMOUNT}
+            displayType={"text"}
+            thousandSeparator={true}
+            decimalScale={2}
+            prefix={"PKR "}
+          />,
+          <div key={d.FPS_CODE} className="flex gap-2">
+            <form
+              method="post"
+              action={`http://benefitx.blue-ex.com/fnsum-cusprn.php`}
+              target="_blank"
+            >
+              <input type="hidden" name="FPS_CODE" value={d.FPS_CODE} />
+              <input type="hidden" name="usrid" value={b_usrId} />
+              <input
+                type="hidden"
+                name="password"
+                value={localStorage.getItem("password")}
+              />
+              <button type="submit">
+                <img src="/icons/acrobat.svg" width="16px" />
+              </button>
+            </form>{" "}
+            <form
+              method="post"
+              action={`http://benefitx.blue-ex.com/fortnight.php`}
+              target="_blank"
+            >
+              <input type="hidden" name="fps_code" value={d.FPS_CODE} />
+              <input type="hidden" name="usrid" value={b_usrId} />
+              <input
+                type="hidden"
+                name="password"
+                value={localStorage.getItem("password")}
+              />
+              <button type="submit">
+                <img src="/icons/file.svg" width="16px" />
+              </button>
+            </form>
+          </div>
         );
-        setIsLoading(false);
+        newRows.push(ro);
+        cp += `${d.FPS_CODE}\t${dateFormat(d.DATE)}\t${dateChanger(
+          d.SDATE
+        )} to ${dateChanger(d.EDATE)}\tPKR ${d.CODAMOUNT}\n`;
+        csvData.push({
+          ref: d.FPS_CODE,
+          date: dateFormat(d.DATE),
+          period: `${dateChanger(d.SDATE)} to ${dateChanger(d.EDATE)}`,
+          cod: `PKR ${d.CODAMOUNT}`,
+        });
       });
+      setOriginalRows(newRows);
+
+      setCopyText(cp);
+      console.log(cp);
+      setIsLoading(false);
     }
   }, [data]);
 
+  const [rows, setRows] = useState(originalRows);
+  useEffect(() => {
+    setRows(originalRows);
+    console.log(originalRows);
+  }, [originalRows]);
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [rows, setRows] = useState(originalRows);
 
   const [searched, setSearched] = useState("");
 
@@ -145,6 +233,7 @@ export default function StatementTable({ data }) {
 
   return (
     <Paper elevation={0} className={classes.root}>
+      {copied && <Alert severity="success">Table Copied to clipboard</Alert>}
       <div className="flex justify-between items-center mb-[1rem]">
         <SearchBar
           value={searched}
@@ -152,9 +241,20 @@ export default function StatementTable({ data }) {
           onCancelSearch={() => cancelSearch()}
         />
         <div className="space-x-2 hidden sm:block">
-          <button className="csvButton">Copy</button>
+          <CopyToClipboard
+            text={copyText}
+            onCopy={() => setCopied({ copied: true })}
+          >
+            <button className="csvButton">Copy</button>
+          </CopyToClipboard>
           <button className="csvButton">Excel</button>
-          <button className="csvButton">CSV</button>
+          <CSVLink
+            data={csvData}
+            headers={headers}
+            filename={"statemnetlist.csv"}
+          >
+            <button className="csvButton">CSV</button>
+          </CSVLink>
         </div>
       </div>
       <TableContainer className={classes.container}>
@@ -163,7 +263,7 @@ export default function StatementTable({ data }) {
             <CircularProgress />
           </div>
         ) : (
-          <Table stickyHeader aria-label="sticky table">
+          <Table id="statementTable" stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
                 {columns.map((column) => (

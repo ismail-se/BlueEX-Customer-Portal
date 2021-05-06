@@ -12,8 +12,7 @@ import useVisible from "../hooks/useVisible";
 import StatementTable from "../components/StatementTable";
 import fetchSettlement from "../functions/fetchSettlement";
 
-
-const Statements = ({ data }) => {
+const Statements = ({ data, allData }) => {
   const [{ acno }, dispatch] = useStateValue();
   const res = JSON.parse(data.user);
   useEffect(() => {
@@ -38,7 +37,7 @@ const Statements = ({ data }) => {
   ]);
   const [dateView, setDateView] = useState(false);
 
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(allData);
 
   useEffect(() => {
     let stYear = state[0].startDate.getFullYear();
@@ -76,22 +75,22 @@ const Statements = ({ data }) => {
     );
   }, [state]);
 
-  const ref = useRef();
+  // const ref = useRef();
 
-  useVisible(ref, () => {
-    setDateView(false);
-  });
+  // useVisible(ref, () => {
+  //   setDateView(false);
+  // });
 
-  const getSettlement = async () => {
-    const url = `http://benefitx.blue-ex.com/api/customerportal/statement.php?acno=${acno}&hashkey=KaPdSgVkYp3s6v9y`;
-    const response = await fetch(url);
-    return await response.json();
-  };
+  // const getSettlement = async () => {
+  //   const url = `http://benefitx.blue-ex.com/api/customerportal/statement.php?acno=${acno}&hashkey=KaPdSgVkYp3s6v9y`;
+  //   const response = await fetch(url);
+  //   return await response.json();
+  // };
 
-  useEffect(async () => {
-    const a = await getSettlement();
-    setList(a);
-  }, []);
+  // useEffect(async () => {
+  //   const a = await getSettlement();
+  //   setList(a);
+  // }, []);
   // }, [startDate, endDate]);
 
   return (
@@ -111,7 +110,7 @@ const Statements = ({ data }) => {
           <Card variant="outlined">
             <CardContent className="border-b p-4 flex items-center justify-between ">
               <h2 className="h2">Statement List</h2>
-              <div
+              {/* <div
                 className="flex items-center space-x-4"
                 ref={ref}
                 onClick={() => setDateView(!dateView)}
@@ -122,10 +121,10 @@ const Statements = ({ data }) => {
                 <button className="dateBtn" ref={ref}>
                   <KeyboardArrowDownIcon />
                 </button>
-              </div>
+              </div> */}
             </CardContent>
             <CardContent>
-              <StatementTable data={list} />
+              <StatementTable data={list} usrid={res.b_usrId} />
             </CardContent>
           </Card>
           {dateView && (

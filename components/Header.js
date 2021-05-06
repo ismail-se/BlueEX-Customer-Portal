@@ -13,7 +13,7 @@ import ProfileBox from "./ProfileBox/ProfileBox";
 import QuickActionBox from "./QuickActionsBox/QuickActionsBox";
 import useVisible from "../hooks/useVisible";
 
-const Header = () => {
+const Header = ({ show, setShow }) => {
   const [{ name }, dispatch] = useStateValue();
   const [state, setState] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
@@ -106,7 +106,7 @@ const Header = () => {
               HELLO <span className="font-bold uppercase">{name} !</span>
             </div>
             {showNotification && <NotificationBox />}
-            {showQuick && <QuickActionBox />}
+            {showQuick && <QuickActionBox show={show} setShow={setShow} />}
             {showProfile && <ProfileBox />}
           </div>
         </div>

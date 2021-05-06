@@ -5,9 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "start": "next start"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -22,16 +20,21 @@
     "convert-excel-to-json": "^1.7.0",
     "cookie": "^0.4.1",
     "date-fns": "^2.21.1",
+    "form-data": "^4.0.0",
     "formik": "^2.2.6",
     "fs": "0.0.1-security",
+    "lodash.clonedeep": "^4.5.0",
     "material-ui-search-bar": "^1.0.0",
     "next": "10.1.3",
     "react": "^17.0.2",
     "react-bootstrap": "^1.5.2",
     "react-cookie": "^4.0.3",
+    "react-copy-to-clipboard": "^5.0.3",
+    "react-csv": "^2.0.3",
     "react-currency-format": "^1.0.0",
     "react-date-range": "^1.1.3",
     "react-dom": "17.0.2",
+    "react-export-excel": "^0.5.3",
     "react-hook-form": "^7.3.3",
     "react-player": "^2.9.0",
     "recharts": "^2.0.9",
@@ -42,8 +45,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",
-    "@storybook/addon-essentials": "^6.2.8",
-    "@storybook/react": "^6.2.8",
     "autoprefixer": "^10.2.5",
     "babel-loader": "^8.2.2",
     "postcss": "^8.2.10",

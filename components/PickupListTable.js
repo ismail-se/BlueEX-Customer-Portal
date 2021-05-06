@@ -49,7 +49,7 @@ const useStyles = makeStyles({
 });
 
 export default function PickupListTable() {
-  const [{ acno }, dispatch] = useStateValue();
+  const [{ acno, b_usrId }, dispatch] = useStateValue();
   const [originalRows, setOriginalRows] = React.useState([]);
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
@@ -105,8 +105,30 @@ export default function PickupListTable() {
           data.detail[i].sheet_no,
           data.detail[i].sheet_date,
           data.detail[i].shipment,
-          "Print",
-          "Print CN"
+          <form
+            method="post"
+            action={`http://benefitx.blue-ex.com/customerportal/inc/prnt_load_sht_cs.php`}
+            target="_blank"
+          >
+            <input type="hidden" name="usrid" value={b_usrId} />
+            <input type="hidden" name="acno" value={acno} />
+            <input type="hidden" name="shtno" value={data.detail[i].sheet_no} />
+            <button className="underline" type="submit">
+              Print
+            </button>
+          </form>,
+          <form
+            method="post"
+            action={`http://benefitx.blue-ex.com/customerportal/inc/cnprn_cusls.php`}
+            target="_blank"
+          >
+            <input type="hidden" name="usrid" value={b_usrId} />
+            <input type="hidden" name="acno" value={acno} />
+            <input type="hidden" name="shtno" value={data.detail[i].sheet_no} />
+            <button className="underline" type="submit">
+              Print CN
+            </button>
+          </form>
         );
         newRows.push(ro);
       }

@@ -9,7 +9,7 @@ import CalculateFareModal from "../components/Modals/CalculateFareModal";
 import useCities from "../hooks/useCities";
 import fetchCities from "../functions/fetchCities";
 
-const Deliveries = ({ data, cities }) => {
+const Deliveries = ({ data }) => {
   const [{ acno }, dispatch] = useStateValue();
   const res = JSON.parse(data.user);
 
@@ -47,11 +47,7 @@ const Deliveries = ({ data, cities }) => {
           </div>
         </div>
       </Layout>
-      <CalculateFareModal
-        cities={cities}
-        show={show}
-        onHide={() => setShow(false)}
-      />
+      <CalculateFareModal show={show} onHide={() => setShow(false)} />
     </div>
   );
 };
@@ -60,7 +56,6 @@ export default Deliveries;
 
 Deliveries.getInitialProps = async ({ req, res }) => {
   const data = parseCookies(req);
-  const cities = await fetchCities("PK");
 
   if (res) {
     if (
@@ -74,6 +69,5 @@ Deliveries.getInitialProps = async ({ req, res }) => {
 
   return {
     data: data && data,
-    cities: cities,
   };
 };
