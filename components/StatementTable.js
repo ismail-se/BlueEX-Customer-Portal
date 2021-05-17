@@ -16,6 +16,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import Alert from "@material-ui/lab/Alert";
 import { CSVLink } from "react-csv";
 import CurrencyFormat from "react-currency-format";
+import { ExportXls } from "./ExportXls";
 
 const headers = [
   { label: "Ref. No", key: "ref" },
@@ -195,7 +196,6 @@ export default function StatementTable() {
       setOriginalRows(newRows);
 
       setCopyText(cp);
-      console.log(cp);
       setIsLoading(false);
     }
   }, [data]);
@@ -203,7 +203,6 @@ export default function StatementTable() {
   const [rows, setRows] = useState(originalRows);
   useEffect(() => {
     setRows(originalRows);
-    console.log(originalRows);
   }, [originalRows]);
 
   const [page, setPage] = useState(0);
@@ -247,7 +246,8 @@ export default function StatementTable() {
           >
             <button className="csvButton">Copy</button>
           </CopyToClipboard>
-          <button className="csvButton">Excel</button>
+
+          <ExportXls csvData={csvData} fileName={"statements"} />
           <CSVLink
             data={csvData}
             headers={headers}

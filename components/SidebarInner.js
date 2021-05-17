@@ -120,7 +120,7 @@ const SidebarInner = () => {
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Developer Center" />
               </ListItem>
             </Link>
-            <Link href="/">
+            <Link href="/faqs">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Knowledge Base" />
               </ListItem>
@@ -161,7 +161,7 @@ const SidebarInner = () => {
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Manage Users" />
               </ListItem>
             </Link> */}
-            <Link href="/">
+            <Link href="/pickup-locations">
               <ListItem button>
                 <ListItemText primary="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x26AC;&nbsp;&nbsp;&nbsp;&nbsp; Pickup Locations" />
               </ListItem>

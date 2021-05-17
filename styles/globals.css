@@ -106,6 +106,9 @@ a {
 .btn {
   @apply text-white bg-[#c4c5d6] rounded-sm text-sm hover:text-white focus:ring-transparent focus:ring-0;
 }
+.btnBlue {
+  @apply text-white bg-[#0047ba] rounded-sm text-sm hover:text-white focus:ring-transparent focus:ring-0 py-[0.5rem] px-[0.8rem] hover:bg-[#133ba0];
+}
 
 .btnBlueBg {
   @apply text-white bg-[#0047ba] rounded-sm text-sm hover:text-white focus:ring-transparent focus:ring-0 p-[1rem];
