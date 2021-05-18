@@ -25,6 +25,8 @@ const headers = [
   { label: "COD", key: "cod" },
 ];
 
+const headings = [["Ref. No", "Date", "Period", "COD"]];
+
 let csvData = [];
 
 const dateChanger = (date) => {
@@ -247,7 +249,11 @@ export default function StatementTable() {
             <button className="csvButton">Copy</button>
           </CopyToClipboard>
 
-          <ExportXls csvData={csvData} fileName={"statements"} />
+          <ExportXls
+            csvData={csvData}
+            fileName={"statements"}
+            headings={headings}
+          />
           <CSVLink
             data={csvData}
             headers={headers}

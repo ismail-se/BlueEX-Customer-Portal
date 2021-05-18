@@ -27,6 +27,13 @@ import { CircularProgress } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import PrintIcon from "@material-ui/icons/Print";
 import AdjustIcon from "@material-ui/icons/Adjust";
+import TrackDetailModal from "./Modals/TrackDetailModal/TrackDetailModal";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { useStateValue } from "../context/StateProvider";
+import CancelShipment from "../functions/cancelShipment";
+
+const MySwal = withReactContent(Swal);
 
 const headers = [
   { label: "CN#", key: "cn" },
@@ -49,6 +56,31 @@ const headers = [
   { label: "Status", key: "status" },
   { label: "FPS Code", key: "fps" },
   { label: "CHQNO", key: "chqno" },
+];
+
+const headings = [
+  [
+    "CN#",
+    "Ship Date",
+    "Arrival Date",
+    "Customer",
+    "Address",
+    "Contact",
+    "Customer Ref",
+    "Product",
+    "COD",
+    "Shipper Name",
+    "Shipper Address",
+    "Shipper Contact",
+    "Booking WGT",
+    "Arrival WGT",
+    "Pieces",
+    "From To",
+    "Comment",
+    "Status",
+    "FPS Code",
+    "CHQNO",
+  ],
 ];
 
 let csvData = [];
@@ -182,7 +214,7 @@ const headCells = [
   { id: "comment", numeric: true, disablePadding: false, label: "Comment" },
   { id: "status", numeric: true, disablePadding: false, label: "Status" },
   { id: "fps", numeric: true, disablePadding: false, label: "FPS Code" },
-  { id: "chqno", numeric: true, disablePadding: false, label: "ChqNo" },
+  { id: "chqno", numeric: true, disablePadding: false, label: "CHQNO" },
   { id: "act", numeric: true, disablePadding: false, label: "Actions" },
 ];
 
@@ -267,26 +299,28 @@ const useToolbarStyles = makeStyles((theme) => ({
   },
 }));
 
-const EnhancedTableToolbar = (props) => {
-  const classes = useToolbarStyles();
-  const { numSelected } = props;
+// const EnhancedTableToolbar = (props) => {
+//   const classes = useToolbarStyles();
+//   const { numSelected, printShipments } = props;
 
-  return (
-    <>
-      {numSelected > 0 && (
-        <div className="flex gap-2">
-          <button className="btnBlue">CREATE A PICKUP</button>
-          <button className="btnBlue">CANCEL SHIPMENT</button>
-          <button className="btnBlue">PRINT SHIPMENTS</button>
-        </div>
-      )}
-    </>
-  );
-};
+//   return (
+//     <>
+//       {numSelected > 0 && (
+//         <div className="flex gap-2">
+//           <button className="btnBlue">CREATE A PICKUP</button>
+//           <button className="btnBlue">CANCEL SHIPMENT</button>
+//           <button className="btnBlue" onClick={printShipments}>
+//             PRINT SHIPMENTS
+//           </button>
+//         </div>
+//       )}
+//     </>
+//   );
+// };
 
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
+// EnhancedTableToolbar.propTypes = {
+//   numSelected: PropTypes.number.isRequired,
+// };
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -313,6 +347,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function DeliveriesTable({ data }) {
+  const [{ acno, b_usrId }, dispatch] = useStateValue();
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -322,6 +357,11 @@ export default function DeliveriesTable({ data }) {
 
   const [originalRows, setOriginalRows] = useState([]);
 
+  const [modalShow, setModalShow] = React.useState(false);
+  const [modalId, setModalId] = React.useState();
+
+  const [bookedCn, setBookedCn] = React.useState([]);
+
   useEffect(() => {
     if (data !== []) {
       setOriginalRows([]);
@@ -329,6 +369,9 @@ export default function DeliveriesTable({ data }) {
       let newRows = [];
       let cp = `CN#\t\tShip Date\t\tArival Date\t\t\tCustomer\t\tAddress\t\tContact\t\tCustomer Ref\t\tProduct\t\tCOD\t\tShipper Name\t\tShipper Address\t\tShipper Contact\t\tBooking WGT\t\tArrival WGT\t\tPieces\t\tFrom To\t\tComment\t\tStatus\t\tFPS Code\t\tCHQNO\n`;
       for (let i = 0; i < data.length; i++) {
+        if (data[i].STAT_MSG.toLowerCase() === "booked") {
+          setBookedCn([...bookedCn, data[i].CNNO]);
+        }
         let ro = createData(
           data[i].CNNO,
           data[i].CN_DATE,
@@ -350,9 +393,7 @@ export default function DeliveriesTable({ data }) {
           <div
             className={`rounded-full w-[8rem] text-white flex justify-center items-center p-[0.5rem] ${
               data[i].STAT_MSG.toLowerCase() === "booked" ? "bg-[#00adef]" : ""
-            } ${
-              data[i].STAT_MSG.toLowerCase() === "booked" ? "bg-[#00adef]" : ""
-            } ${
+            }  ${
               data[i].STAT_MSG.toLowerCase() === "delivered"
                 ? "bg-[#c6d53f]"
                 : ""
@@ -370,14 +411,26 @@ export default function DeliveriesTable({ data }) {
           data[i].FPS_CODE === "" ? "-" : data[i].FPS_CODE,
           data[i].CHQNO === "" ? "-" : data[i].FPS_CODE,
           <div className="flex flex-col ">
-            <IconButton>
-              <MoreHorizIcon />
-            </IconButton>
-            <IconButton>
+            {data[i].STAT_MSG.toLowerCase() === "booked" && (
+              <IconButton>
+                <MoreHorizIcon />
+              </IconButton>
+            )}
+            <IconButton
+              onClick={() => {
+                setModalId(data[i].CNNO);
+                setModalShow(true);
+              }}
+            >
               <AdjustIcon />
             </IconButton>
             <IconButton>
-              <PrintIcon />
+              <a
+                href={`http://benefit.blue-ex.com/customerportal/inc/cnprncust.php?${data[i].CNNO}`}
+                target="_blank"
+              >
+                <PrintIcon />
+              </a>
             </IconButton>
           </div>
         );
@@ -469,6 +522,25 @@ export default function DeliveriesTable({ data }) {
     setSelected([]);
   };
 
+  const [codes, setCodes] = React.useState("");
+
+  const selectedCodes = () => {
+    var CNOBJ = new Array();
+    var str = String(selected);
+    var str_array = str.split(",");
+    for (var i = 0; i < str_array.length; i++) {
+      var code = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+      var code_array = code.split("_");
+      CNOBJ[i] = code_array[0];
+    }
+    console.log(CNOBJ.join());
+    setCodes(CNOBJ.join());
+  };
+
+  React.useEffect(() => {
+    selectedCodes();
+  }, [selected]);
+
   const handleClick = (event, cn) => {
     const selectedIndex = selected.indexOf(cn);
     let newSelected = [];
@@ -503,11 +575,57 @@ export default function DeliveriesTable({ data }) {
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+  const printShipments = () => {
+    selectedCodes();
+    MySwal.fire({
+      title: "WARNING:",
+      text: "Are you sure you want to Print this Shipments?",
+      icon: "warning",
+      showCancelButton: true,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        document.querySelector("#deliveryPrint").click();
+      }
+      if (result.isCanceled) {
+      }
+    });
+  };
+
+  const cancelShip = () => {
+    MySwal.fire({
+      title: "WARNING:",
+      text: "Are you sure you want to Cancel this Shipment?",
+      icon: "warning",
+      showCancelButton: true,
+    }).then(async (result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        await CancelShipment(b_usrId, acno, selected);
+        console.log("Booked ", bookedCn);
+      }
+      if (result.isCanceled) {
+      }
+    });
+  };
+
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
+      <Paper elevation={0} className={classes.paper}>
         {copied && <Alert severity="success">Table Copied to clipboard</Alert>}
-        <EnhancedTableToolbar numSelected={selected.length} />
+        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+        {selected.length > 0 && (
+          <div className="flex gap-2 mb-4 flex-col sm:flex-row">
+            <button className="btnBlue">CREATE A PICKUP</button>
+            <button className="btnBlue" onClick={cancelShip}>
+              CANCEL SHIPMENT
+            </button>
+            <button className="btnBlue" onClick={printShipments}>
+              PRINT SHIPMENTS
+            </button>
+          </div>
+        )}
+
         <div className="flex justify-between items-center mb-[1rem]">
           <SearchBar
             value={searched}
@@ -522,7 +640,11 @@ export default function DeliveriesTable({ data }) {
               <button className="csvButton">Copy</button>
             </CopyToClipboard>
 
-            <ExportXls csvData={csvData} fileName={"deliveries"} />
+            <ExportXls
+              csvData={csvData}
+              fileName={"deliveries"}
+              headings={headings}
+            />
             <CSVLink
               data={csvData}
               headers={headers}
@@ -547,6 +669,7 @@ export default function DeliveriesTable({ data }) {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              printShipments={printShipments}
             />
             <TableBody>
               {stableSort(rows, getComparator(order, orderBy))
@@ -620,6 +743,26 @@ export default function DeliveriesTable({ data }) {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
+      <TrackDetailModal
+        cn={modalId}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
+      {/* Print */}
+      <form
+        method="post"
+        action={`http://benefitx.blue-ex.com/customerportal/inc/cnpdfcs.php`}
+        target="_blank"
+      >
+        <input type="hidden" name="usrid" value={b_usrId} />
+        <input
+          type="hidden"
+          name="password"
+          value={localStorage.getItem("password")}
+        />
+        <input type="hidden" name="codes" value={codes} />
+        <button type="submit" id="deliveryPrint"></button>
+      </form>
     </div>
   );
 }

@@ -362,9 +362,9 @@ const CreateShipment = ({ data }) => {
                     </select>
                   </div>
                   <div className="row flex-row-reverse mt-[-2rem]">
-                    <button className="bg-[#0047ba] text-white rounded-sm text-xs p-2 ">
+                    <div className="bg-[#0047ba] text-white rounded-sm text-xs p-2 cursor-pointer">
                       Add Pickup Location
-                    </button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

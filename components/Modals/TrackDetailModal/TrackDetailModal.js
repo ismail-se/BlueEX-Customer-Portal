@@ -8,7 +8,6 @@ import FormData from "form-data";
 const TrackDetailModal = (props) => {
   const [data, setData] = useState(null);
   var formdata = new FormData();
-  console.log(formdata);
   useEffect(async () => {
     formdata.append("request", `{"cnno":"${props.cn}"}`);
 
@@ -25,10 +24,9 @@ const TrackDetailModal = (props) => {
       .then((response) => response.json())
       .then((result) => setData(result.detail[0]))
       .catch((error) => console.log("error", error));
-
   }, [props.cn]);
 
-  useEffect(()=>{console.log(data)},[data])
+  // useEffect(()=>{console.log(data)},[data])
 
   return (
     <Modal
@@ -52,11 +50,16 @@ const TrackDetailModal = (props) => {
             <div className={styles.details}>
               <div className={styles.col}>
                 <h5>STATUS</h5>
-                <div className={styles.status}>{data.status}</div>
+                <div
+                  className={`
+                  ${styles.status} `}
+                >
+                  {data.status.toUpperCase()}
+                </div>
               </div>
               <div className={styles.col}>
                 <h5>CN#</h5>
-                <div className={styles.status}>{ data.cnno }</div>
+                <div className={styles.status}>{data.cnno}</div>
               </div>
               <div className={styles.col}>
                 <h5>DATE</h5>
@@ -86,8 +89,13 @@ const TrackDetailModal = (props) => {
               <h4>BLUEEX SHIPPING LABEL: {props.cn}</h4>
             </div>
             <div className={styles.shipdetails}>
-                {data.trackingdetail.map((d)=><span>{d.status_date} {d.status_time} - {d.status_message} </span>)}
-              
+              {data.trackingdetail.map((d) => (
+                <span
+                  key={`${d.status_date}${d.status_time}-${d.status_message}`}
+                >
+                  {d.status_date} {d.status_time} - {d.status_message}{" "}
+                </span>
+              ))}
             </div>
           </Modal.Body>
         </>
