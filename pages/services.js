@@ -5,7 +5,7 @@ import { parseCookies } from "../helpers/";
 import { useEffect } from "react";
 import { useStateValue } from "../context/StateProvider";
 import { actionTypes } from "../context/reducer";
-import TariffRatesTable from "../components/tariffRatesTable";
+import TariffRatesTable from "../components/TariffRatesTable";
 import RegularCustomerTable from "../components/RegularCustomerTable";
 
 const Services = ({ data }) => {
@@ -96,7 +96,7 @@ const Services = ({ data }) => {
                 Scheme for Regular Customers
               </h2>
             </div>
-              <RegularCustomerTable />
+            <RegularCustomerTable />
           </CardContent>
           <CardContent>
             <div className="flex-1 p-4">
