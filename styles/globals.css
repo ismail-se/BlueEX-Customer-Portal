@@ -238,3 +238,56 @@ a {
 .bookingSpan {
   @apply text-[#0047ba] bg-white rounded-full font-semibold flex justify-center items-center w-[1.5rem] h-[1.5rem] ml-2;
 }
+
+.Mui-expanded {
+  color: #0047ba !important;
+}
+.MuiAccordionSummary-content .MuiTypography-body1 {
+  font-size: 1rem !important;
+  font-family: "Poppins", sans-serif !important;
+}
+
+code,
+pre {
+  color: #476cc7e0;
+  text-shadow: 0 1px rgb(192 192 192 / 91%);
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 0;
+  -o-tab-size: 0;
+  tab-size: 0;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+  font-size: 0.8rem;
+}
+pre {
+  background: #f2f2f2 !important;
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+  border-radius: 0.3em;
+}
+.token.cdata,
+.token.comment,
+.token.doctype,
+.token.prolog {
+  color: #3f3f3f;
+}
+.token.constant,
+.token.deleted,
+.token.property,
+.token.symbol,
+.token.tag {
+  color: #f92672;
+}
+.token.punctuation {
+  color: #476cc7e0;
+}

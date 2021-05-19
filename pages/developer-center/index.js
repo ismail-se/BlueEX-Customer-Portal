@@ -1,10 +1,11 @@
-import { Card, CardContent, Link } from "@material-ui/core";
+import { Card, CardContent } from "@material-ui/core";
 import Layout from "../../components/Layout";
 import Head from "next/head";
 import { parseCookies } from "../../helpers/";
 import { useEffect } from "react";
 import { useStateValue } from "../../context/StateProvider";
 import { actionTypes } from "../../context/reducer";
+import Link from "next/link";
 
 const DeveloperCenter = ({ data }) => {
   const [{ acno }, dispatch] = useStateValue();
@@ -35,23 +36,20 @@ const DeveloperCenter = ({ data }) => {
             <h2 className="h2">API Detail</h2>
           </CardContent>
           <CardContent className="p-4 flex flex-wrap gap-6">
-            <Link
-              href="/"
-              className="flex-1 cursor-pointer flex justify-center items-center shadow-lg h-[7rem] min-w-[15rem]"
-            >
-              <img src="/images/openapixml.png" alt="" />
+            <Link href="/developer-center/open-api-xml">
+              <div className="flex-1 cursor-pointer flex justify-center items-center shadow-lg h-[7rem] min-w-[15rem]">
+                <img src="/images/openapixml.png" alt="" />
+              </div>
             </Link>
-            <Link
-              href="/"
-              className="flex-1 cursor-pointer flex justify-center items-center shadow-lg h-[7rem] min-w-[15rem]"
-            >
-              <img src="/images/openapijson.png" alt="" />
+            <Link href="/developer-center/open-api-json">
+              <div className="flex-1 cursor-pointer flex justify-center items-center shadow-lg h-[7rem] min-w-[15rem]">
+                <img src="/images/openapijson.png" alt="" />
+              </div>
             </Link>
-            <Link
-              href="/"
-              className="flex-1 cursor-pointer flex justify-center items-center shadow-lg h-[7rem] min-w-[15rem]"
-            >
-              <img src="/images/webx.png" alt="" />
+            <Link href="/developer-center/webx">
+              <div className="flex-1 cursor-pointer flex justify-center items-center shadow-lg h-[7rem] min-w-[15rem]">
+                <img src="/images/webx.png" alt="" />
+              </div>
             </Link>
             <div
               href="/"
@@ -63,17 +61,15 @@ const DeveloperCenter = ({ data }) => {
                 alt=""
               />
             </div>
-            <Link
-              href="/"
-              className="flex-1 cursor-pointer flex justify-center items-center shadow-lg h-[7rem] min-w-[15rem]"
-            >
-              <img src="/images/magento.png" alt="" />
+            <Link href="/developer-center/magento">
+              <div className="flex-1 cursor-pointer flex justify-center items-center shadow-lg h-[7rem] min-w-[15rem]">
+                <img src="/images/magento.png" alt="" />
+              </div>
             </Link>
-            <Link
-              href="/"
-              className="flex-1 cursor-pointer flex justify-center items-center shadow-lg h-[7rem] min-w-[15rem]"
-            >
-              <img src="/images/woocommerce.png" alt="" />
+            <Link href="/">
+              <div className="flex-1 cursor-pointer flex justify-center items-center shadow-lg h-[7rem] min-w-[15rem]">
+                <img src="/images/woocommerce.png" alt="" />
+              </div>
             </Link>
             <div
               href="/"
@@ -85,7 +81,7 @@ const DeveloperCenter = ({ data }) => {
                 alt=""
               />
             </div>
-            <Link
+            <div
               href="/"
               className="flex-1 bg-[#f7f7f7] cursor-pointer flex justify-center items-center  h-[7rem] min-w-[15rem]"
             >
@@ -94,8 +90,8 @@ const DeveloperCenter = ({ data }) => {
                 style={{ filter: "grayscale(100%)", opacity: "0.4" }}
                 alt=""
               />
-            </Link>
-            <Link
+            </div>
+            <div
               href="/"
               className="flex-1 bg-[#f7f7f7] cursor-pointer flex justify-center items-center  h-[7rem] min-w-[15rem]"
             >
@@ -104,7 +100,7 @@ const DeveloperCenter = ({ data }) => {
                 style={{ filter: "grayscale(100%)", opacity: "0.4" }}
                 alt=""
               />
-            </Link>
+            </div>
           </CardContent>
         </Card>
       </div>
