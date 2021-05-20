@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,16 +7,21 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-});
-
-export default function uploadError({ data }) {
-  const classes = useStyles();
-
-  function createData(
+function createData(
+  name,
+  address,
+  contact,
+  email,
+  productName,
+  productValue,
+  pieces,
+  weight,
+  destination,
+  customerRef,
+  comments,
+  storeId
+) {
+  return {
     name,
     address,
     contact,
@@ -29,29 +33,17 @@ export default function uploadError({ data }) {
     destination,
     customerRef,
     comments,
-    storeId
-  ) {
-    return {
-      name,
-      address,
-      contact,
-      email,
-      productName,
-      productValue,
-      pieces,
-      weight,
-      destination,
-      customerRef,
-      comments,
-      storeId,
-    };
-  }
+    storeId,
+  };
+}
 
-  const originalRows = [];
+let originalRows = [];
 
+export default function ShipTable({ data }) {
   const [rows, setRows] = useState(originalRows);
 
-  useEffect(() => {
+  const refresh = () => {
+    originalRows = [];
     for (let d of data) {
       originalRows.push(
         createData(
@@ -70,12 +62,20 @@ export default function uploadError({ data }) {
         )
       );
     }
-    console.log("Data", rows);
-  }, []);
+  };
+
+  useEffect(() => {
+    console.log("Data", data);
+    refresh();
+  }, [data]);
+
+  useEffect(() => {
+    setRows(originalRows);
+  }, [originalRows]);
 
   return (
     <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Customer Name</TableCell>
@@ -96,11 +96,9 @@ export default function uploadError({ data }) {
           {rows.map((row) => (
             <TableRow key={row.name}>
               <TableCell component="th" scope="row">
-                <input type="text" value={row.name} />
+                {row.name}
               </TableCell>
-              <TableCell>
-                <input type="text" value={row.address} />
-              </TableCell>
+              <TableCell>{row.address}</TableCell>
               <TableCell>{row.contact}</TableCell>
               <TableCell>{row.email}</TableCell>
               <TableCell>{row.productName}</TableCell>

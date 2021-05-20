@@ -83,10 +83,14 @@ const Deliveries = ({ data }) => {
     return await response.json();
   };
 
+  const reload = async () => {
+    const a = await getDeliveries();
+    setList(a);
+  };
+
   useEffect(async () => {
     setIsLoading(true);
     const a = await getDeliveries();
-    console.log(a);
     setList(a);
     setIsLoading(false);
   }, [startDate, endDate]);
@@ -134,7 +138,7 @@ const Deliveries = ({ data }) => {
                   <CircularProgress />
                 </div>
               ) : (
-                <DeliveriesTable data={list} />
+                <DeliveriesTable data={list} reload={reload} />
               )}
             </CardContent>
           </Card>

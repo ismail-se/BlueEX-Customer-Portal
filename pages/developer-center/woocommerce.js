@@ -6,10 +6,13 @@ import { parseCookies } from "../../helpers/";
 import { useState, useEffect } from "react";
 import { useStateValue } from "../../context/StateProvider";
 import { actionTypes } from "../../context/reducer";
-import Download from "../../components/Magento/Download";
-import OrderPlace from "../../components/Magento/OrderPlace";
+import Download from "../../components/Woocommerce/Download";
+import Installation from "../../components/Woocommerce/Installation";
+import Setup from "../../components/Woocommerce/Setup";
+import Settings from "../../components/Woocommerce/Settings";
+import Demo from "../../components/Woocommerce/Demo";
 
-const Magento = ({ data }) => {
+const Woocommerce = ({ data }) => {
   const [{ acno }, dispatch] = useStateValue();
   const res = JSON.parse(data.user);
 
@@ -43,25 +46,40 @@ const Magento = ({ data }) => {
         <link rel="icon" href="/icons/favicon.ico" />
       </Head>
       <div className="">
-        <h1 className="heading">Magento</h1>
+        <h1 className="heading">Woocommerce</h1>
         <Card variant="outlined" className="mt-[2rem] ">
           <CardContent className="border-b p-4 flex items-center justify-between ">
-            <h2 className="h2">Magento Detail</h2>
+            <h2 className="h2">Woocommerce Detail</h2>
           </CardContent>
           <CardContent className="flex flex-col lg:flex-row">
             <div className={styles.menu}>
               <ul className="">
                 <li id="download" onClick={() => setFaqComp("download")}>
-                  DOWNLOAD & SETUP
+                  DOWNLOAD PLUGIN
                 </li>
-                <li id="orderPlace" onClick={() => setFaqComp("orderPlace")}>
-                  ORDER PLACEMENT & TESTING
+                <li
+                  id="installation"
+                  onClick={() => setFaqComp("installation")}
+                >
+                  INSTALLATION & ACTIVATION
+                </li>
+                <li id="setup" onClick={() => setFaqComp("setup")}>
+                  SETUP YOUR PLUGIN
+                </li>
+                <li id="setting" onClick={() => setFaqComp("setting")}>
+                  SETTINGS & FINALIZATION
+                </li>
+                <li id="demo" onClick={() => setFaqComp("demo")}>
+                  DEMO CREDENTIALS
                 </li>
               </ul>
             </div>
             <div className={`${styles.accordion} lg:w-[20rem]`}>
               {faqComp === "download" && <Download />}
-              {faqComp === "orderPlace" && <OrderPlace />}
+              {faqComp === "installation" && <Installation />}
+              {faqComp === "setup" && <Setup />}
+              {faqComp === "setting" && <Settings />}
+              {faqComp === "demo" && <Demo />}
             </div>
           </CardContent>
         </Card>
@@ -70,9 +88,9 @@ const Magento = ({ data }) => {
   );
 };
 
-export default Magento;
+export default Woocommerce;
 
-Magento.getInitialProps = async ({ req, res }) => {
+Woocommerce.getInitialProps = async ({ req, res }) => {
   const data = parseCookies(req);
 
   if (res) {

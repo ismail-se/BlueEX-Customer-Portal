@@ -1,4 +1,4 @@
-const CancelShipment = async (usrid, acno, cnno) => {
+const CreatePickup = async (usrid, acno, cnno) => {
   let data;
 
   let cndetail = "[";
@@ -8,7 +8,7 @@ const CancelShipment = async (usrid, acno, cnno) => {
   var formdata = new FormData();
   formdata.append(
     "request",
-    `{"cndetail":${cndetail},"acno":"${acno}","usrId":"${usrid}"}`
+    `{"acno":"${acno}","usrid":"${usrid}","cndetail":${cndetail}}`
   );
 
   var requestOptions = {
@@ -18,7 +18,7 @@ const CancelShipment = async (usrid, acno, cnno) => {
   };
 
   await fetch(
-    "http://portal.blue-ex.com/api1/customerportal/cancelshipment.py",
+    "http://benefitx.blue-ex.com/api/customerportal/createloadsheet.php",
     requestOptions
   )
     .then((response) => response.json())
@@ -30,4 +30,4 @@ const CancelShipment = async (usrid, acno, cnno) => {
   return data;
 };
 
-export default CancelShipment;
+export default CreatePickup;

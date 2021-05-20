@@ -32,6 +32,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useStateValue } from "../context/StateProvider";
 import CancelShipment from "../functions/cancelShipment";
+import CreatePickup from "../functions/createPickup";
 
 const MySwal = withReactContent(Swal);
 
@@ -346,7 +347,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DeliveriesTable({ data }) {
+let bookedCn = [];
+
+export default function DeliveriesTable({ data, reload }) {
   const [{ acno, b_usrId }, dispatch] = useStateValue();
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
@@ -360,17 +363,16 @@ export default function DeliveriesTable({ data }) {
   const [modalShow, setModalShow] = React.useState(false);
   const [modalId, setModalId] = React.useState();
 
-  const [bookedCn, setBookedCn] = React.useState([]);
-
   useEffect(() => {
     if (data !== []) {
       setOriginalRows([]);
+
       csvData = [];
       let newRows = [];
       let cp = `CN#\t\tShip Date\t\tArival Date\t\t\tCustomer\t\tAddress\t\tContact\t\tCustomer Ref\t\tProduct\t\tCOD\t\tShipper Name\t\tShipper Address\t\tShipper Contact\t\tBooking WGT\t\tArrival WGT\t\tPieces\t\tFrom To\t\tComment\t\tStatus\t\tFPS Code\t\tCHQNO\n`;
       for (let i = 0; i < data.length; i++) {
-        if (data[i].STAT_MSG.toLowerCase() === "booked") {
-          setBookedCn([...bookedCn, data[i].CNNO]);
+        if (data[i].STAT_MSG.toLowerCase() !== "booked") {
+          bookedCn.push(data[i].CNNO);
         }
         let ro = createData(
           data[i].CNNO,
@@ -391,7 +393,7 @@ export default function DeliveriesTable({ data }) {
           `${data[i].ORIG_CITY} - ${data[i].DEST_CITY}`,
           data[i].COMENT === "" ? "-" : data[i].COMENT,
           <div
-            className={`rounded-full w-[8rem] text-white flex justify-center items-center p-[0.5rem] ${
+            className={`rounded-full w-[8rem] text-white flex justify-center items-center text-center p-[0.5rem] ${
               data[i].STAT_MSG.toLowerCase() === "booked" ? "bg-[#00adef]" : ""
             }  ${
               data[i].STAT_MSG.toLowerCase() === "delivered"
@@ -403,6 +405,8 @@ export default function DeliveriesTable({ data }) {
                 : ""
             } ${
               data[i].STAT_MSG.toLowerCase() === "arrival" ? "bg-[#7e5e7b]" : ""
+            } ${
+              data[i].STAT_MSG.toLowerCase() === "ready for pickup" ? "bg-[#03a596]" : ""
             }
               `}
           >
@@ -533,7 +537,6 @@ export default function DeliveriesTable({ data }) {
       var code_array = code.split("_");
       CNOBJ[i] = code_array[0];
     }
-    console.log(CNOBJ.join());
     setCodes(CNOBJ.join());
   };
 
@@ -592,21 +595,87 @@ export default function DeliveriesTable({ data }) {
     });
   };
 
+  const check = () => {
+    let warn = false;
+    for (let booked of bookedCn) {
+      for (let sel of selected) {
+        if (sel === booked) {
+          warn = true;
+          return warn;
+        }
+      }
+    }
+    return warn;
+  };
+
   const cancelShip = () => {
-    MySwal.fire({
-      title: "WARNING:",
-      text: "Are you sure you want to Cancel this Shipment?",
-      icon: "warning",
-      showCancelButton: true,
-    }).then(async (result) => {
-      /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {
-        await CancelShipment(b_usrId, acno, selected);
-        console.log("Booked ", bookedCn);
-      }
-      if (result.isCanceled) {
-      }
-    });
+    if (check()) {
+      MySwal.fire({
+        text: "Please select only booked shipments",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+        }
+      });
+    } else {
+      MySwal.fire({
+        title: "WARNING:",
+        text: "Are you sure you want to Cancel this Shipment?",
+        icon: "warning",
+        showCancelButton: true,
+      }).then(async (result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          const res = await CancelShipment(b_usrId, acno, selected);
+          if (res.detail[0].status === "1") {
+            MySwal.fire({
+              text: "Successfully! Your Shipment has been canceled",
+            });
+            reload();
+          } else {
+            MySwal.fire({
+              text: "Error! Your Shipment has not been canceled",
+            });
+          }
+        }
+        if (result.isCanceled) {
+        }
+      });
+    }
+  };
+
+  const createPick = () => {
+    if (check()) {
+      MySwal.fire({
+        text: "Please select only booked shipments",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+        }
+      });
+    } else {
+      MySwal.fire({
+        title: "WARNING:",
+        text: "Are you sure you want to Create Pickup?",
+        icon: "warning",
+        showCancelButton: true,
+      }).then(async (result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          const res = await CreatePickup(b_usrId, acno, selected);
+          if (res.success === "1") {
+            MySwal.fire({
+              text: "New Pickup Sheet is Successfully Created",
+            });
+            reload();
+          } else {
+            MySwal.fire({
+              text: "Error! Pickup sheet not created",
+            });
+          }
+        }
+        if (result.isCanceled) {
+        }
+      });
+    }
   };
 
   return (
@@ -616,7 +685,9 @@ export default function DeliveriesTable({ data }) {
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
         {selected.length > 0 && (
           <div className="flex gap-2 mb-4 flex-col sm:flex-row">
-            <button className="btnBlue">CREATE A PICKUP</button>
+            <button className="btnBlue" onClick={createPick}>
+              CREATE A PICKUP
+            </button>
             <button className="btnBlue" onClick={cancelShip}>
               CANCEL SHIPMENT
             </button>

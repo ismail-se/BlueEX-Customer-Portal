@@ -66,7 +66,7 @@ const DeveloperCenter = ({ data }) => {
                 <img src="/images/magento.png" alt="" />
               </div>
             </Link>
-            <Link href="/">
+            <Link href="/developer-center/woocommerce">
               <div className="flex-1 cursor-pointer flex justify-center items-center shadow-lg h-[7rem] min-w-[15rem]">
                 <img src="/images/woocommerce.png" alt="" />
               </div>

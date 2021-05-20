@@ -7,11 +7,15 @@ import { useState, useEffect } from "react";
 import { useStateValue } from "../../context/StateProvider";
 import { actionTypes } from "../../context/reducer";
 import PlaceOrder from "../../components/OpenApiJson/PlaceOrder";
-import Tracking from "../../components/OpenApiXml/Tracking";
+import Tracking from "../../components/OpenApiJson/Tracking";
 import CancelOrder from "../../components/OpenApiXml/CancelOrder";
 import GetTariff from "../../components/OpenApiXml/GetTariff";
 import GetCities from "../../components/OpenApiXml/GetCities";
 import Status from "../../components/OpenApiJson/Status";
+import Tariff from "../../components/OpenApiJson/Tariff";
+import CityList from "../../components/OpenApiJson/CityList";
+import InternationalCityList from "../../components/OpenApiJson/InternationalCityList";
+import Cancel from "../../components/OpenApiJson/Cancel";
 
 const Json = ({ data }) => {
   const [{ acno }, dispatch] = useStateValue();
@@ -66,29 +70,36 @@ const Json = ({ data }) => {
                   Place Order
                 </li>
                 <li id="status" onClick={() => setFaqComp("status")}>
-                  Status
-                </li>
-                <li id="cancelOrder" onClick={() => setFaqComp("cancelOrder")}>
-                  Cancel Order
-                </li>
-                <li id="getTariff" onClick={() => setFaqComp("getTariff")}>
-                  Get Tariff
-                </li>
-                <li id="getCities" onClick={() => setFaqComp("getCities")}>
-                  Get Cities
+                  Status API
                 </li>
                 <li id="tracking" onClick={() => setFaqComp("tracking")}>
-                  Tracking
+                  Tracking API
+                </li>
+                <li id="tariff" onClick={() => setFaqComp("tariff")}>
+                  Tariff API
+                </li>
+                <li id="cityList" onClick={() => setFaqComp("cityList")}>
+                  City List API
+                </li>
+                <li
+                  id="internationalCityList"
+                  onClick={() => setFaqComp("internationalCityList")}
+                >
+                  International City List API
+                </li>
+                <li id="cancel" onClick={() => setFaqComp("cancel")}>
+                  Cancel Shipment API
                 </li>
               </ul>
             </div>
             <div className={`${styles.accordion} lg:w-[20rem]`}>
               {faqComp === "placeOrder" && <PlaceOrder />}
               {faqComp === "status" && <Status />}
-              {faqComp === "cancelOrder" && <CancelOrder />}
-              {faqComp === "getTariff" && <GetTariff />}
-              {faqComp === "getCities" && <GetCities />}
               {faqComp === "tracking" && <Tracking />}
+              {faqComp === "tariff" && <Tariff />}
+              {faqComp === "cityList" && <CityList />}
+              {faqComp === "internationalCityList" && <InternationalCityList />}
+              {faqComp === "cancel" && <Cancel />}
             </div>
           </CardContent>
         </Card>

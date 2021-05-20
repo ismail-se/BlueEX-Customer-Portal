@@ -8,30 +8,27 @@ import { Card, CardContent } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import useCities from "../hooks/useCities";
 import * as XLSX from "xlsx";
-import UploadShipmentListTable from "../components/UploadShipmentListTable";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import UploadSuccessfully from "../components/UploadSuccessfully";
-import uploadError from "../components/UploadError";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
+import ShipTable from "../components/UploadBooking/ShipTable";
+import ErrorTable from "../components/UploadBooking/ErrorTable";
+import UploadSuccessfully from "../components/UploadBooking/UploadSuccessfully";
 
 const UploadBooking = ({ data }) => {
   const [{ acno }, dispatch] = useStateValue();
   const res = JSON.parse(data.user);
-  const [tableData, setTableData] = useState([]);
-  const [errorTable, setErrorTable] = useState([]);
-  const [uploadedTable, setUploadedTable] = useState([]);
-  const [showTable, setShowTable] = useState("shipmentList");
-
-  useEffect(
-    () => console.log("Table Data", tableData, "length", tableData.length),
-    [tableData]
-  );
 
   const originCity = useCities("PK");
 
   const [service, setService] = useState("BE");
   const [fragile, setFragile] = useState("N");
   const [origCity, setOrigCity] = useState("KHI");
+
+  const [shipTable, setShipTable] = useState(null);
+  const [errorTable, setErrorTable] = useState(null);
+  const [uploadTable, setUploadTable] = useState(null);
 
   useEffect(() => {
     dispatch({
@@ -65,8 +62,8 @@ const UploadBooking = ({ data }) => {
         workbook.Sheets["Sheet1"]
       );
       // let jsonObject = JSON.stringify(rowObject);
-      // console.log(rowObject);
-      setTableData(rowObject);
+      console.log(rowObject);
+      setShipTable(rowObject);
       // }
       // );
     };
@@ -103,28 +100,33 @@ const UploadBooking = ({ data }) => {
     }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        for (let d of tableData) {
+        let errorT = [];
+        let uploadT = [];
+
+        for (let d of shipTable) {
           console.log(d);
           const res = await uploadShipment(d);
-          // console.log("RES ", res.record[0].stat);
+          console.log("RES ", res.record[0].stat);
           if (res.record[0].stat === "save") {
-            setUploadedTable([
-              ...uploadedTable,
-              {
-                cnno: res.record[0].cnno,
-                customer: d["Consignee Name"],
-                product: d["Product Name"],
-                cod: d["COD"],
-                from: origCity,
-                to: d["Destination"],
-                customerRef: d["Customer Reference"],
-                remarks: d["Customer Comment"],
-              },
-            ]);
+            console.log("res", res);
+
+            uploadT.push({
+              cnno: res.record[0].cnno,
+              customer: d["Consignee Name"],
+              product: d["Product Name"],
+              cod: d["COD"],
+              from: origCity,
+              to: d["Destination"],
+              customerRef: d["Customer Reference"],
+              remarks: d["Customer Comment"],
+            });
           } else {
-            setErrorTable([...errorTable, d]);
+            errorT.push(d);
           }
         }
+
+        setUploadTable(uploadT);
+        setErrorTable(errorT);
       }
     });
   };
@@ -228,9 +230,9 @@ const UploadBooking = ({ data }) => {
                   </select>
                 </div>
                 <div className="row flex-row-reverse mt-[-2rem]">
-                  <button className="bg-[#0047ba] text-white rounded-sm text-xs p-2 ">
+                  <div className="bg-[#0047ba] text-white rounded-sm text-xs p-2 ">
                     Add Pickup Location
-                  </button>
+                  </div>
                 </div>
                 <div className="row">
                   <label className="label"></label>
@@ -263,79 +265,35 @@ const UploadBooking = ({ data }) => {
         </form>
         {/* Upload Shipment - Upload Errors - Upload Successfully */}
         <Card variant="outlined" className="mt-[2rem]">
-          <CardContent className="border-b p-4 flex items-center flex-col lg:flex-row gap-2">
-            <div className="flex-1 flex justify-center items-center w-full">
-              <button
-                className="bookingBtn"
-                onClick={() => setShowTable("shipmentList")}
-              >
-                UPLOAD SHIPMENT LIST{" "}
-                <span className="bookingSpan">
-                  {tableData && tableData.length}
-                </span>
-              </button>
-            </div>
-            <div className="flex-1 flex justify-center items-center w-full">
-              <button
-                className="bookingBtn"
-                onClick={() => setShowTable("uploadError")}
-              >
-                UPLOAD ERRORS{" "}
-                <span className="bookingSpan">
-                  {errorTable && errorTable.length}
-                </span>
-              </button>
-            </div>
-            <div className="flex-1 flex justify-center items-center w-full">
-              <button
-                className="bookingBtn"
-                onClick={() => setShowTable("uploadSuccessfully")}
-              >
-                UPLOAD SUCCESSFULLY{" "}
-                <span className="bookingSpan">
-                  {uploadedTable && uploadedTable.length}
-                </span>
-              </button>
-            </div>
-          </CardContent>
-          <CardContent>
-            <div>
-              {tableData.length !== 0 && showTable === "shipmentList" && (
-                <>
-                  <div>
-                    <button onClick={onShipment} className="btnBlueBg mb-4">
+          <CardContent className="border-b p-4 ">
+            <Tabs defaultActiveKey="shipmentList" id="uncontrolled-tab-example">
+              <Tab eventKey="shipmentList" title="UPLOAD SHIPMENT LIST">
+                {shipTable !== [] && shipTable !== null && (
+                  <div className="mt-4">
+                    <button onClick={onShipment} className="btnBlue">
                       Create Shipments
                     </button>
+                    <ShipTable data={shipTable} />
                   </div>
-                  <UploadShipmentListTable data={tableData} />
-                </>
-              )}
-            </div>
-            <div>
-              {errorTable.length !== 0 && showTable === "uploadError" && (
-                <>
-                  <div>
-                    <button onClick={onShipment} className="btnBlueBg mb-4">
-                      Create Shipments
-                    </button>
-                  </div>
-                  <uploadError data={errorTable} />
-                </>
-              )}
-            </div>
-            <div>
-              {uploadedTable.length !== 0 &&
-                showTable === "uploadSuccessfully" && (
-                  <>
-                    <div>
-                      <button onClick={onShipment} className="btnBlueBg mb-4">
-                        Create Pickup
-                      </button>
-                    </div>
-                    <UploadSuccessfully data={uploadedTable} />
-                  </>
                 )}
-            </div>
+              </Tab>
+              <Tab eventKey="errors" title="UPLOAD ERRORS">
+                {errorTable !== [] && errorTable !== null && (
+                  <div className="mt-4">
+                    <button className="btnBlue">Create Shipments</button>
+                    <ErrorTable data={errorTable} />
+                  </div>
+                )}
+              </Tab>
+              <Tab eventKey="successfully" title="UPLOAD SUCCESSFULLY">
+                {uploadTable !== [] && uploadTable !== null && (
+                  <div className="mt-4">
+                    <button className="btnBlue">Create Shipments</button>
+                    <UploadSuccessfully data={uploadTable} />
+                  </div>
+                )}
+              </Tab>
+            </Tabs>
           </CardContent>
         </Card>
       </Layout>

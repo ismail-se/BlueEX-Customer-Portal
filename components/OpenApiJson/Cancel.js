@@ -1,7 +1,7 @@
-const Tracking = () => {
+const Cancel = () => {
   return (
     <div>
-      <h1 className="text-[2rem] my-6">Tracking API</h1>
+      <h1 className="text-[2rem] my-6">Cancel Shipment API</h1>
       <h4 className="text-xl mb-2">Credentials</h4>
       <div className="overflow-x-auto">
         <table className="w-full max-w-full">
@@ -9,7 +9,7 @@ const Tracking = () => {
             <tr>
               <td className="border p-3">URL</td>
               <td className="border p-3">
-                http://bigazure.com/api/demo/json/tracking/serverjson.php
+                http://bigazure.com/api/live/json/cancel/serverjson.php
               </td>
             </tr>
             <tr>
@@ -22,7 +22,7 @@ const Tracking = () => {
             </tr>
             <tr>
               <td className="border p-3">Type</td>
-              <td className="border p-3">Post/Get</td>
+              <td className="border p-3">GET</td>
             </tr>
           </tbody>
         </table>
@@ -45,9 +45,7 @@ const Tracking = () => {
             {"\t"}
             {"\t"}
             {"\t"}
-            {"\t"}
-            {"  "}"acno": "KHI-00000",{"\n"}
-            {"\t"}
+            {"\t"}"acno": "KHI-00000",{"\n"}
             {"\t"}
             {"\t"}
             {"\t"}
@@ -60,7 +58,7 @@ const Tracking = () => {
             {"\t"}
             {"\t"}
             {"\t"}
-            {"  "}"userid": "demo",{"\n"}
+            {"\t"}"userid": "demo",{"\n"}
             {"\t"}
             {"\t"}
             {"\t"}
@@ -73,9 +71,7 @@ const Tracking = () => {
             {"\t"}
             {"\t"}
             {"\t"}
-            {"\t"}
-            {"  "}"password": "demo123456",{"\n"}
-            {"\t"}
+            {"\t"}"password": "demo123456",{"\n"}
             {"\t"}
             {"\t"}
             {"\t"}
@@ -88,8 +84,7 @@ const Tracking = () => {
             {"\t"}
             {"\t"}
             {"\t"}
-            {"  "}"order_refernce_code": "10005647"{"\n"}
-            {"\t"}
+            {"\t"}"consignee_number": "5007338130",{"\n"}
             {"\t"}
             {"\t"}
             {"\t"}
@@ -125,9 +120,7 @@ const Tracking = () => {
             {"\t"}
             {"\t"}
             {"\t"}
-            {"\t"}
-            {"  "}"status": "0",{"\n"}
-            {"\t"}
+            {"\t"}"status": "0",{"\n"}
             {"\t"}
             {"\t"}
             {"\t"}
@@ -140,8 +133,22 @@ const Tracking = () => {
             {"\t"}
             {"\t"}
             {"\t"}
-            {"  "}"Error_message": "Order Reference Code is invalid"{"\n"}
+            {"\t"}"cn": "5007338130",{"\n"}
             {"\t"}
+            {"\t"}
+            {"\t"}
+            {"\t"}
+            {"\t"}
+            {"\t"}
+            {"\t"}
+            {"\t"}
+            {"\t"}
+            {"\t"}
+            {"\t"}
+            {"\t"}
+            {"\t"}"message": "This CN can't be cancel, the status has been
+            changed from booked. Send email to cancel_cn@blue-ex.com with CN
+            number for cancellation"{"\n"}
             {"\t"}
             {"\t"}
             {"\t"}
@@ -176,8 +183,6 @@ const Tracking = () => {
             {"\t"}
             {"\t"}
             {"\t"}
-            {"\t"}
-            {"  "}
             {"\t"}"status": "1",{"\n"}
             {"\t"}
             {"\t"}
@@ -191,8 +196,6 @@ const Tracking = () => {
             {"\t"}
             {"\t"}
             {"\t"}
-            {"\t"}
-            {"  "}
             {"\t"}"success": "1",{"\n"}
             {"\t"}
             {"\t"}
@@ -206,9 +209,7 @@ const Tracking = () => {
             {"\t"}
             {"\t"}
             {"\t"}
-            {"\t"}
-            {"  "}
-            {"\t"}"order_refernce_code": "10005647",{"\n"}
+            {"\t"}"cn": "5007338130",{"\n"}
             {"\t"}
             {"\t"}
             {"\t"}
@@ -221,25 +222,7 @@ const Tracking = () => {
             {"\t"}
             {"\t"}
             {"\t"}
-            {"\t"}
-            {"     "}"message": "Order information received, pending at
-            Shipper's end ",{"\n"}
-            {"\t"}
-            {"\t"}
-            {"\t"}
-            {"\t"}
-            {"\t"}
-            {"\t"}
-            {"\t"}
-            {"\t"}
-            {"\t"}
-            {"\t"}
-            {"\t"}
-            {"\t"}
-            {"\t"}
-            {"  "}
-            {"\t"}"cn": "5006635355"{"\n"}
-            {"\t"}
+            {"\t"}"message": cancelled"{"\n"}
             {"\t"}
             {"\t"}
             {"\t"}
@@ -256,9 +239,7 @@ const Tracking = () => {
           </code>
         </pre>
       </div>
-      <h1 className="text-[2rem] my-6">
-        Parameters definition for Request Tracking API
-      </h1>
+      <h1 className="text-[2rem] my-6">Parameters definition for Tariff API</h1>
       <div className="overflow-x-auto">
         <table className="table table-bordered">
           <tbody>
@@ -282,7 +263,7 @@ const Tracking = () => {
             </tr>
             <tr>
               <td>testbit</td>
-              <td>Y</td>
+              <td>y</td>
               <td>
                 If you are testing use ‘y’ when you use your actual account code
                 and password use ‘n’
@@ -299,60 +280,9 @@ const Tracking = () => {
               <td>Userid which BlueEX will provide you after demo</td>
             </tr>
             <tr>
-              <td>order_refernce_code</td>
+              <td>consignee_number</td>
               <td>10000018</td>
-              <td>Your order code should be here</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <h1 className="text-[2rem] my-6">
-        Parameters definition for Response Tracking API
-      </h1>
-      <div className="overflow-x-auto">
-        <table className="table table-bordered">
-          <tbody>
-            <tr>
-              <th scope="row" width="30%">
-                Parameters
-              </th>
-              <th scope="row" width="30%">
-                Sample data
-              </th>
-              <th scope="row" width="40%">
-                Descriptions
-              </th>
-            </tr>
-            <tr>
-              <td>status</td>
-              <td>0 or 1</td>
-              <td>
-                If there is any error the Status will return 0 if There is not
-                any error then status will return 1
-              </td>
-            </tr>
-            <tr>
-              <td>success</td>
-              <td>1</td>
-              <td>
-                This will be only return if the CN has been generated of your
-                order
-              </td>
-            </tr>
-            <tr>
-              <td>order_refernce_code</td>
-              <td>100000176</td>
-              <td>Same order code which you sent in request</td>
-            </tr>
-            <tr>
-              <td>message </td>
-              <td>Order information received, pending at Shipper's end </td>
-              <td>Tracking Status of Shipment</td>
-            </tr>
-            <tr>
-              <td>cn</td>
-              <td>5006635355</td>
-              <td>Consignee number of blueex if shipment is booked </td>
+              <td>Add consignee number</td>
             </tr>
           </tbody>
         </table>
@@ -361,4 +291,4 @@ const Tracking = () => {
   );
 };
 
-export default Tracking;
+export default Cancel;
